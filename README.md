@@ -14,7 +14,7 @@ Run as root straight after a clean install of Kali.
 -shortcutfolder <value> = Add shortcut for the /opt folder to the Desktop folder.
 ```
 
-The following command with create already defined aliases, change hostname to `pentest` and add `Tools` named shortcut of the /opt folder to Desktop.
+The following command will create already defined aliases, change hostname to `pentest` and add `Tools` named shortcut of the /opt folder to Desktop.
 
 `bash kalipostinstall.sh -alias -hostname pentest -shortcutfolder Tools`
 
