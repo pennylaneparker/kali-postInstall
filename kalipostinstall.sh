@@ -5,6 +5,7 @@
 #  Personal post-install script for Kali Linux Rolling        #
 #-Original Author(s)------------------------------------------#
 #  g0tmilk ~ https://blog.g0tmi1k.com/                        #
+#-Customisation-----------------------------------------------#
 #  Asli Koksal ~  https://github.com/pennylaneparker          #
 #-Operating System--------------------------------------------#
 #  Designed for: Kali Linux Rolling [x64] (VM - VMware)       #
