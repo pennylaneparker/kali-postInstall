@@ -1,6 +1,6 @@
 #!/bin/bash
 #-Metadata----------------------------------------------------#
-#  Filename: kali-rolling.sh             (Update: 2020-02-18) #
+#  Filename: kali-rolling.sh             (Update: 2022-06-10) #
 #-Info--------------------------------------------------------#
 #  Personal post-install script for Kali Linux Rolling        #
 #-Original Author(s)------------------------------------------#
@@ -45,19 +45,19 @@ start_time=$(date +%s)
 
 ##### Hardcoded versions:
 pycharm="https://download.jetbrains.com/python/pycharm-community-2016.2.3.tar.gz"
-dex2jar="https://github.com/pxb1988/dex2jar/files/1867564/dex-tools-2.1-SNAPSHOT.zip"
-jdgui="https://github.com/java-decompiler/jd-gui/releases/download/v1.6.5/jd-gui-1.6.5.jar"
-ffuf="https://github.com/ffuf/ffuf/releases/download/v1.0.1/ffuf_1.0.1_linux_amd64.tar.gz"
-amass="https://github.com/OWASP/Amass/releases/download/v3.4.3/amass_v3.4.3_linux_amd64.zip"
-nmapvulscan="http://www.computec.ch/projekte/vulscan/download/nmap_nse_vulscan-2.0.tar.gz"
-sonicvis="https://code.soundsoftware.ac.uk/attachments/download/2606/sonic-visualiser_4.0.1_amd64.deb"
-apktool="https://bitbucket.org/iBotPeaches/apktool/downloads/apktool_2.4.1.jar"
-dextools="https://github.com/pxb1988/dex2jar/files/1867564/dex-tools-2.1-SNAPSHOT.zip"
+dex2jar="https://github.com/pxb1988/dex2jar/releases/download/v2.1/dex2jar-2.1.zip"
+jdgui="https://github.com/java-decompiler/jd-gui/releases/download/v1.6.6/jd-gui-1.6.6.jar"
+ffuf="https://github.com/ffuf/ffuf/releases/download/v1.5.0/ffuf_1.5.0_linux_amd64.tar.gz"
+amass="https://github.com/OWASP/Amass/releases/download/v3.19.2/amass_linux_amd64.zip"
+nmapvulscan="https://github.com/scipag/vulscan/archive/refs/tags/2.1.tar.gz"
+sonicvis="https://code.soundsoftware.ac.uk/attachments/download/2822/sonic-visualiser_4.5_amd64.deb"
+apktool="https://github.com/iBotPeaches/Apktool/releases/download/v2.6.1/apktool_2.6.1.jar"
+dextools="https://github.com/pxb1988/dex2jar/releases/download/v2.1/dex2jar-2.1.zip"
 mingw="http://sourceforge.net/projects/mingw/files/Installer/mingw-get/mingw-get-0.6.2-beta-20131004-1/mingw-get-0.6.2-mingw32-beta-20131004-1-bin.zip/download"
 py27="https://www.python.org/ftp/python/2.7.9/python-2.7.9.msi"
 pywin="http://sourceforge.net/projects/pywin32/files/pywin32/Build%20219/pywin32-219.win32-py2.7.exe/download"
 stegsolve="http://www.caesum.com/handbook/Stegsolve.jar"
-cfr="http://www.benf.org/other/cfr/cfr_0_116.jar"
+cfr="https://www.benf.org/other/cfr/cfr-0.152.jar"
 lazagne="https://github.com/AlessandroZ/LaZagne/releases/download/2.4.3/lazagne.exe"
 gitrob="https://github.com/michenriksen/gitrob/releases/download/v2.0.0-beta/gitrob_linux_amd64_2.0.0-beta.zip"
 
@@ -218,7 +218,7 @@ fi
 
 ##### Install required packages
 (( STAGE++ )); echo -e "\n\n ${GREEN}[+]${RESET} (${STAGE}/${TOTAL}) Installing ${GREEN}required packages${RESET}"
-apt -y -qq install curl unixodbc-dev python-dnspython windows-binaries make gcc git cifs-utils libgmp3-dev libmpc-dev libfftw3-single3 libfishsound1 libid3tag0 liblo7 liblrdf0 libmad0 liboggz2 libopusfile0 python3-dev libffi-dev build-essential virtualenvwrapper ruby-dev libpcap-dev python-pip python3-pip exploitdb unrar wordlists \
+apt -y -qq install libfftw3-double3 curl unixodbc-dev python-dnspython windows-binaries make gcc git cifs-utils libgmp3-dev libmpc-dev libfftw3-single3 libfishsound1 libid3tag0 liblo7 liblrdf0 libmad0 liboggz2 libopusfile0 python3-dev libffi-dev build-essential virtualenvwrapper ruby-dev libpcap-dev python-pip python3-pip exploitdb unrar wordlists \
   || echo -e ' '${RED}'[!] Issue with apt install'${RESET} 1>&2
 
 
@@ -232,7 +232,7 @@ python3 -m pip install --upgrade pip \
 
 ##### Install kernel headers
 (( STAGE++ )); echo -e "\n\n ${GREEN}[+]${RESET} (${STAGE}/${TOTAL}) Installing ${GREEN}kernel headers${RESET}"
-apt -y -qq install "linux-headers-$(uname -r)" \
+apt -y -qq install linux-headers-5.17.0-kali3-amd64 \
   || echo -e ' '${RED}'[!] Issue with apt install'${RESET} 1>&2
 if [[ $? -ne 0 ]]; then
   echo -e ' '${RED}'[!]'${RESET}" There was an ${RED}issue installing kernel headers${RESET}" 1>&2
@@ -322,8 +322,7 @@ git config --global mergetool.prompt false
 (( STAGE++ )); echo -e "\n\n ${GREEN}[+]${RESET} (${STAGE}/${TOTAL}) Installing ${GREEN}go${RESET} ~ programming language"
 apt -y -qq install golang \
   || echo -e ' '${RED}'[!] Issue with apt install'${RESET} 1>&2
-echo "export GO111MODULE=on" >> /root/.bashrc
-source /root/.bashrc
+echo "export GO111MODULE=on" >> /home/kali/.bashrc
 #go files in /root/go/bin unless you specify other
 
 
@@ -382,7 +381,7 @@ apt -y -qq install wine winetricks \
   || echo -e ' '${RED}'[!] Issue with apt install'${RESET} 1>&2
 #--- Using x64?
 if [[ "$(uname -m)" == 'x86_64' ]]; then
-  echo -e " ${GREEN}[i]${RESET} Configuring ${GREEN}WINE (x64)${RESET}"
+  (( STAGE++ )); echo -e " ${GREEN}[i]${RESET} (${STAGE}/${TOTAL}) Configuring ${GREEN}WINE (x64)${RESET}"
   dpkg --add-architecture i386
   apt -qq update
   apt -y -qq install wine32 \
@@ -1265,8 +1264,8 @@ ln -sf `which trufflehog` ${gitdir}
 #####  Install gitleaks
 (( STAGE++ )); echo -e "\n\n ${GREEN}[+]${RESET} (${STAGE}/${TOTAL}) Installing ${GREEN}gitleaks${RESET} ~ Audit git repos for secrets."
 export GOPATH=${gitdir}/gitleaks
-go get -u github.com/zricethezav/gitleaks/v3@latest  \
-  || echo -e ' '${RED}'[!] Issue with go get'${RESET} 1>&2
+go install github.com/zricethezav/gitleaks/v3@latest  \
+  || echo -e ' '${RED}'[!] Issue with go install'${RESET} 1>&2
 ln -sf ${gitdir}/gitleaks/bin/gitleaks /usr/local/bin/gitleaks
 
 
@@ -1347,40 +1346,40 @@ ln -sf ${discdir}/ffuf/ffuf /usr/local/bin/ffuf
 #####  Install gobuster
 (( STAGE++ )); echo -e "\n\n ${GREEN}[+]${RESET} (${STAGE}/${TOTAL}) Installing ${GREEN}gobuster${RESET} ~ brute force, URIs (directories and files) in web sites, DNS subdomains (with wildcard support), Virtual Host names on target web servers"
 export GOPATH=${discdir}/gobuster
-go get -u github.com/OJ/gobuster  \
-  || echo -e ' '${RED}'[!] Issue with go get'${RESET} 1>&2
+go install github.com/OJ/gobuster@latest  \
+  || echo -e ' '${RED}'[!] Issue with go install'${RESET} 1>&2
 ln -sf ${discdir}/gobuster/bin/gobuster /usr/local/bin/gobuster
 
 
 #####  Install hakrawler
 (( STAGE++ )); echo -e "\n\n ${GREEN}[+]${RESET} (${STAGE}/${TOTAL}) Installing ${GREEN}hakrawler${RESET} ~ Go web crawler designed for easy, quick discovery of endpoints and assets within a web application. It can be used to discover Forms, Endpoints, Subdomains, Related documents and JS Files"
 export GOPATH=${discdir}/hakrawler
-go get -u github.com/hakluke/hakrawler  \
-  || echo -e ' '${RED}'[!] Issue with go get'${RESET} 1>&2
+go install github.com/hakluke/hakrawler@latest  \
+  || echo -e ' '${RED}'[!] Issue with go install'${RESET} 1>&2
 ln -sf ${discdir}/hakrawler/bin/hakrawler /usr/local/bin/hakrawler
 
 
 #####  Install meg
 (( STAGE++ )); echo -e "\n\n ${GREEN}[+]${RESET} (${STAGE}/${TOTAL}) Installing ${GREEN}meg${RESET} ~ tool for fetching lots of URLs but still being 'nice' to servers"
 export GOPATH=${discdir}/meg
-go get -u github.com/tomnomnom/meg  \
-  || echo -e ' '${RED}'[!] Issue with go get'${RESET} 1>&2
+go install github.com/tomnomnom/meg@latest  \
+  || echo -e ' '${RED}'[!] Issue with go install'${RESET} 1>&2
 ln -sf ${discdir}/meg/bin/meg /usr/local/bin/meg
 
 
 #####  Install assetfinder
 (( STAGE++ )); echo -e "\n\n ${GREEN}[+]${RESET} (${STAGE}/${TOTAL}) Installing ${GREEN}assetfinder${RESET} ~ Find domains and subdomains potentially related to a given domain"
 export GOPATH=${subdomdir}/assetfinder
-go get -u github.com/tomnomnom/assetfinder  \
-  || echo -e ' '${RED}'[!] Issue with go get'${RESET} 1>&2
+go install github.com/tomnomnom/assetfinder@latest  \
+  || echo -e ' '${RED}'[!] Issue with go install'${RESET} 1>&2
 ln -sf ${subdomdir}/assetfinder/bin/assetfinder /usr/local/bin/assetfinder
 
 
 #####  Install filter-resolved
 (( STAGE++ )); echo -e "\n\n ${GREEN}[+]${RESET} (${STAGE}/${TOTAL}) Installing ${GREEN}filter-resolved${RESET} ~ Take domains on stdin and output them on stdout if they resolve"
 export GOPATH=${subdomdir}/filter-resolved
-go get -u github.com/tomnomnom/hacks/filter-resolved  \
-  || echo -e ' '${RED}'[!] Issue with go get'${RESET} 1>&2
+go install github.com/tomnomnom/hacks/filter-resolved@latest  \
+  || echo -e ' '${RED}'[!] Issue with go install'${RESET} 1>&2
 ln -sf ${subdomdir}/filter-resolved/bin/filter-resolved /usr/local/bin/filter-resolved
 
 
@@ -1411,8 +1410,8 @@ ln -sf ${subdomdir}/findomain /usr/local/bin/findomain
 #####  Install httprobe
 (( STAGE++ )); echo -e "\n\n ${GREEN}[+]${RESET} (${STAGE}/${TOTAL}) Installing ${GREEN}httprobe${RESET} ~ Take a list of domains and probe for working http and https servers"
 export GOPATH=${subdomdir}/httprobe
-go get -u github.com/tomnomnom/httprobe  \
-  || echo -e ' '${RED}'[!] Issue with go get'${RESET} 1>&2
+go install github.com/tomnomnom/httprobe@latest  \
+  || echo -e ' '${RED}'[!] Issue with go install'${RESET} 1>&2
 ln -sf ${subdomdir}/httprobe/bin/httprobe /usr/local/bin/httprobe
 
 
@@ -1448,8 +1447,8 @@ timeout 300 curl --progress-bar -k -L -f https://gist.github.com/ayoubfathi/57c3
 #####  Install subfinder
 (( STAGE++ )); echo -e "\n\n ${GREEN}[+]${RESET} (${STAGE}/${TOTAL}) Installing ${GREEN}subfinder${RESET} ~ subdomain discovery tool that discovers valid subdomains for websites by using passive online sources"
 export GOPATH=${subdomdir}/subfinder
-go get -u github.com/projectdiscovery/subfinder/cmd/subfinder  \
-  || echo -e ' '${RED}'[!] Issue with go get'${RESET} 1>&2
+go install github.com/projectdiscovery/subfinder/cmd/subfinder@latest  \
+  || echo -e ' '${RED}'[!] Issue with go install'${RESET} 1>&2
 ln -sf ${subdomdir}/subfinder/bin/subfinder /usr/local/bin/subfinder
 
 
@@ -1488,8 +1487,8 @@ chmod +x "${file}"
 #####  Install html-tool
 (( STAGE++ )); echo -e "\n\n ${GREEN}[+]${RESET} (${STAGE}/${TOTAL}) Installing ${GREEN}html-tool${RESET} ~ Take URLs or filenames for HTML documents on stdin and extract tag contents, attribute values, or comments"
 export GOPATH=${recondir}/html-tool
-go get -u github.com/tomnomnom/hacks/html-tool  \
-  || echo -e ' '${RED}'[!] Issue with go get'${RESET} 1>&2
+go install github.com/tomnomnom/hacks/html-tool@latest  \
+  || echo -e ' '${RED}'[!] Issue with go install'${RESET} 1>&2
 ln -sf ${recondir}/html-tool/bin/html-tool /usr/local/bin/html-tool
 
 
@@ -1516,8 +1515,8 @@ ln -sf `which snmpenum` ${recondir}
 #####  Install unfurl
 (( STAGE++ )); echo -e "\n\n ${GREEN}[+]${RESET} (${STAGE}/${TOTAL}) Installing ${GREEN}unfurl${RESET} ~ Pull out bits of URLs provided on stdin"
 export GOPATH=${recondir}/unfurl
-go get -u github.com/tomnomnom/unfurl  \
-  || echo -e ' '${RED}'[!] Issue with go get'${RESET} 1>&2
+go install github.com/tomnomnom/unfurl@latest  \
+  || echo -e ' '${RED}'[!] Issue with go install'${RESET} 1>&2
 ln -sf ${recondir}/unfurl/bin/unfurl /usr/local/bin/unfurl
 
 
@@ -1551,8 +1550,8 @@ ln -sf `which wafw00f` ${recondir}
 #####  Install waybackurls
 (( STAGE++ )); echo -e "\n\n ${GREEN}[+]${RESET} (${STAGE}/${TOTAL}) Installing ${GREEN}waybackurls${RESET} ~ Fetch all the URLs that the Wayback Machine knows about for a domain"
 export GOPATH=${recondir}/waybackurls
-go get -u github.com/tomnomnom/waybackurls  \
-  || echo -e ' '${RED}'[!] Issue with go get'${RESET} 1>&2
+go install github.com/tomnomnom/waybackurls@latest  \
+  || echo -e ' '${RED}'[!] Issue with go install'${RESET} 1>&2
 ln -sf ${recondir}/waybackurls/bin/waybackurls /usr/local/bin/waybackurls
 
 
@@ -1575,8 +1574,8 @@ ln -sf ${recondir}/whatcms.sh /usr/local/bin/whatcms
 #####  Install gf
 (( STAGE++ )); echo -e "\n\n ${GREEN}[+]${RESET} (${STAGE}/${TOTAL}) Installing ${GREEN}gf${RESET} ~ A wrapper around grep to avoid typing common patterns"
 export GOPATH=${recondir}/gf
-go get -u github.com/tomnomnom/gf  \
-  || echo -e ' '${RED}'[!] Issue with go get'${RESET} 1>&2
+go install github.com/tomnomnom/gf@latest  \
+  || echo -e ' '${RED}'[!] Issue with go install'${RESET} 1>&2
 #echo 'source $GOPATH/src/github.com/tomnomnom/gf/gf-completion.bash' >> ~/.bashrc
 ln -sf ${recondir}/gf/bin/gf /usr/local/bin/gf
 #cp -r $GOPATH/src/github.com/tomnomnom/gf/examples ~/.gf
@@ -1661,15 +1660,14 @@ echo -e "\n\n ${GREEN}[+]${RESET}${GREEN} personalisation steps. They are all di
 #####  Create shortcut in Desktop to the opt folder
 if [ "${shortcutadd}" == "true" ]; then
     (( STAGE++ )); echo -e "\n\n ${GREEN}[+]${RESET} (${STAGE}/${TOTAL}) Creating ${GREEN}tools folder in Desktop${RESET} "
-    ln -sf /opt/ /root/Desktop/
-    mv /root/Desktop/opt /root/Desktop/${shortcutfolder}
+    ln -sf /opt/ /home/kali/Desktop/
+    mv /home/kali/Desktop/opt /home/kali/Desktop/${shortcutfolder}
     sleep 2s
 fi
 
 #####  Setup personal aliases
 if [ "${addaliases}" == "true" ]; then
     (( STAGE++ )); echo -e "\n\n ${GREEN}[+]${RESET} (${STAGE}/${TOTAL}) Setup ${GREEN}Personal Aliases${RESET} "
-    echo "alias fuck='sudo \$(fc -ln -1)'" >> ~/.bash_aliases
     echo "alias godmode='sudo su -'" >> ~/.bash_aliases
     echo "alias lt='ls -alth'" >> ~/.bash_aliases
     source ~/.bash_aliases
@@ -1707,7 +1705,6 @@ if [[ "$?" -ne 0 ]]; then
   curl -sI http://http.kali.org/README
   exit 1
 fi
-
 
 
 
